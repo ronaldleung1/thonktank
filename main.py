@@ -1,4 +1,8 @@
+from dotenv import load_dotenv
+load_dotenv('.env')
+
 import os
+
 import sqlite3
 from sqlite3 import Error
 
@@ -15,4 +19,5 @@ def create_connection(db_file):
             conn.close()
 
 if __name__ == '__main__':
-    create_connection() # r"C:\sqlite\db\pythonsqlite.db"
+    print(os.environ.get("DB_FILE"))
+    create_connection(os.environ.get("DB_FILE")) # r"C:\sqlite\db\pythonsqlite.db"
