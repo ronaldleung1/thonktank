@@ -47,7 +47,7 @@ def main():
     database = os.environ.get("DB_FILE_PATH")
 
     sql_create_ideas_table =  """CREATE TABLE IF NOT EXISTS ideas (
-                                    id integer PRIMARY KEY,
+                                    id integer PRIMARY KEY AUTOINCREMENT,
                                     name text NOT NULL,
                                     description text
                                 );"""
@@ -55,14 +55,20 @@ def main():
     # create a database connection
     conn = create_connection(database) # if os.path.exists(database) else create_connection(r"C:\sqlite\db\pythonsqlite.db")
 
-    # create tables
     if conn is not None:
+        print("Thonktank (ctrl+C to exit)")
+
         # create ideas table
         create_ideas_table(conn, sql_create_ideas_table)
-        create_idea(conn, ("Test idea", "This is a test idea"))
-        create_idea(conn, ("Test idea 2", "This is another test idea"))
+        
+        while(True):
+          print("Create new idea (ctrl+C to exit)")
+          name = input("Name: ")
+          description = input("Description: ")
+          create_idea(conn, (name, description))
     else:
         print("Error! cannot create the database connection.")
+        quit()
 
 if __name__ == '__main__':
     main()
