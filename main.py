@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv('.env')
 
-import os
+import os, sys
 
 import sqlite3
 from sqlite3 import Error
@@ -43,7 +43,23 @@ def create_idea(conn, idea):
     conn.commit()
     return cur.lastrowid
 
+def select_ideas_table(conn):
+    """
+    Query all rows in the ideas table
+    :param conn: the Connection object
+    :return:
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM ideas")
+
+    rows = cur.fetchall()
+
+    for row in rows:
+        print(row)
+
 def main():
+    os.system("clear")
+
     database = os.environ.get("DB_FILE_PATH")
 
     sql_create_ideas_table =  """CREATE TABLE IF NOT EXISTS ideas (
@@ -56,19 +72,29 @@ def main():
     conn = create_connection(database) # if os.path.exists(database) else create_connection(r"C:\sqlite\db\pythonsqlite.db")
 
     if conn is not None:
-        print("Thonktank (ctrl+C to exit)")
 
         # create ideas table
         create_ideas_table(conn, sql_create_ideas_table)
         
         while(True):
-          print("Create new idea (ctrl+C to exit)")
-          name = input("Name: ")
-          description = input("Description: ")
-          create_idea(conn, (name, description))
+            print("Thonktank (Ctrl+C to exit)")
+            select_ideas_table(conn)
+            option = input("\n(1) Create new idea (2) Edit idea (3) Delete idea (4) Exit\n")
+            if(option == "1"):
+                name = str(input("Name: "))
+                description = str(input("Description: "))
+                create_idea(conn, (name, description))
+            elif(option == "2"):
+                print("Feature to be implemented")
+            elif(option == "3"):
+                print("Feature to be implemented")
+            elif(option == "3"):
+                sys.exit(0)
+            else:
+                print("Not a valid command")
+            os.system("clear")
     else:
-        print("Error! cannot create the database connection.")
-        quit()
+        sys.exit("Cannot create the database connection")
 
 if __name__ == '__main__':
     main()
