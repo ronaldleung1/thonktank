@@ -71,6 +71,18 @@ def update_idea(conn, idea):
     cur.execute(sql, idea)
     conn.commit()
 
+def delete_idea(conn, id):
+    """
+    Delete an idea by id
+    :param conn:  Connection to the SQLite database
+    :param id: id of the idea
+    :return:
+    """
+    sql = "DELETE FROM ideas WHERE id=?"
+    cur = conn.cursor()
+    cur.execute(sql, (id,))
+    conn.commit()
+
 conn = None
 
 def main():
@@ -110,7 +122,8 @@ def main():
                 update_idea(conn, (name, description, id))
             elif(option == "3"):
                 # Delete idea
-                input("Feature to be implemented (enter to continue)")
+                id = int(input("Select ID of idea to be deleted: "))
+                delete_idea(conn, id)
             elif(option == "4"):
                 sys.exit(0)
             else:
