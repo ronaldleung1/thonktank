@@ -57,6 +57,20 @@ def select_ideas_table(conn):
     for row in rows:
         print(row)
 
+def update_idea(conn, idea):
+    """
+    Update idea with matching id in table
+    :param conn: the Connection object
+    :return: idea
+    """
+    sql =  """UPDATE ideas
+              SET name = ? ,
+                  description = ?
+              WHERE id = ?"""
+    cur = conn.cursor()
+    cur.execute(sql, idea)
+    conn.commit()
+
 conn = None
 
 def main():
@@ -90,8 +104,10 @@ def main():
                 create_idea(conn, (name, description))
             elif(option == "2"):
                 # Edit idea
-                id = input("Select ID of idea to be edited: ")
-                input("Feature to be implemented (enter to continue)")
+                id = int(input("Select ID of idea to be edited: "))
+                name = str(input("Name: "))
+                description = str(input("Description: "))
+                update_idea(conn, (name, description, id))
             elif(option == "3"):
                 # Delete idea
                 input("Feature to be implemented (enter to continue)")
