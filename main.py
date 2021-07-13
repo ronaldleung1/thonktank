@@ -57,6 +57,8 @@ def select_ideas_table(conn):
     for row in rows:
         print(row)
 
+conn = None
+
 def main():
     os.system("clear")
 
@@ -69,6 +71,7 @@ def main():
                                 );"""
      
     # create a database connection
+    global conn
     conn = create_connection(database) # if os.path.exists(database) else create_connection(r"C:\sqlite\db\pythonsqlite.db")
 
     if conn is not None:
@@ -77,21 +80,25 @@ def main():
         create_ideas_table(conn, sql_create_ideas_table)
         
         while(True):
-            print("Thonktank (Ctrl+C to exit)")
+            print("Thonktank")
             select_ideas_table(conn)
             option = input("\n(1) Create new idea (2) Edit idea (3) Delete idea (4) Exit\n")
             if(option == "1"):
+                # Create new idea
                 name = str(input("Name: "))
                 description = str(input("Description: "))
                 create_idea(conn, (name, description))
             elif(option == "2"):
-                print("Feature to be implemented")
+                # Edit idea
+                id = input("Select ID of idea to be edited: ")
+                input("Feature to be implemented (enter to continue)")
             elif(option == "3"):
-                print("Feature to be implemented")
-            elif(option == "3"):
+                # Delete idea
+                input("Feature to be implemented (enter to continue)")
+            elif(option == "4"):
                 sys.exit(0)
             else:
-                print("Not a valid command")
+                input("Not a valid command (enter to continue)")
             os.system("clear")
     else:
         sys.exit("Cannot create the database connection")
