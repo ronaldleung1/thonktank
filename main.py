@@ -3,6 +3,8 @@ load_dotenv('.env')
 
 import os, sys
 
+from tabulate import tabulate
+
 import sqlite3
 from sqlite3 import Error
 
@@ -54,8 +56,7 @@ def select_ideas_table(conn):
 
     rows = cur.fetchall()
 
-    for row in rows:
-        print(row)
+    print(tabulate(rows, headers=["#", "Name", "Description"], tablefmt="fancy_grid"))
 
 def update_idea(conn, idea):
     """
