@@ -28,7 +28,6 @@ def create_ideas_table(conn, create_table_sql):
         c = conn.cursor()
         c.execute(create_table_sql)
     except Error as e:
-        print("SQL error: ") 
         print(e)
 
 def create_idea(conn, idea):
@@ -38,8 +37,8 @@ def create_idea(conn, idea):
     :param idea:
     :return: idea id
     """
-    sql = """INSERT INTO ideas(name,description)
-             VALUES(?,?)"""
+    sql = """INSERT INTO ideas(name, description, tags)
+             VALUES(?,?,?)"""
     cur = conn.cursor()
     cur.execute(sql, idea)
     conn.commit()
@@ -56,7 +55,7 @@ def select_ideas_table(conn):
 
     rows = cur.fetchall()
 
-    print(tabulate(rows, headers=["#", "Name", "Description"], tablefmt="fancy_grid"))
+    print(tabulate(rows, headers=["#", "Name", "Description", "Tags"], tablefmt="fancy_grid"))
 
 def update_idea(conn, idea):
     """
@@ -66,7 +65,8 @@ def update_idea(conn, idea):
     """
     sql =  """UPDATE ideas
               SET name = ? ,
-                  description = ?
+                  description = ? ,
+                  tags = ?
               WHERE id = ?"""
     cur = conn.cursor()
     cur.execute(sql, idea)
@@ -94,7 +94,8 @@ def main():
     sql_create_ideas_table =  """CREATE TABLE IF NOT EXISTS ideas (
                                     id integer PRIMARY KEY AUTOINCREMENT,
                                     name text NOT NULL,
-                                    description text
+                                    description text,
+                                    tags text
                                 );"""
      
     # create a database connection
@@ -114,13 +115,15 @@ def main():
                 # Create new idea
                 name = str(input("Name: "))
                 description = str(input("Description: "))
-                create_idea(conn, (name, description))
+                tags = str(input("Tags (separate with spaces): ")).lower()
+                create_idea(conn, (name, description, tags))
             elif(option == "2"):
                 # Edit idea
                 id = int(input("Select ID of idea to be edited: "))
                 name = str(input("Name: "))
                 description = str(input("Description: "))
-                update_idea(conn, (name, description, id))
+                tags = str(input("Tags (separate with spaces): ")).lower()
+                update_idea(conn, (name, description, tags, id))
             elif(option == "3"):
                 # Delete idea
                 id = int(input("Select ID of idea to be deleted: "))

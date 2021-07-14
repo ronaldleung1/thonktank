@@ -9,6 +9,7 @@ Requirements
 - pip (to install requirements.txt dependencies)
 
 Additionally, create a `.env` file and supply it with `DB_FILE_PATH=<your-file-path>/thonktank.db`
+
 ### Run
 You can run it directly in the program directory with
 ```
