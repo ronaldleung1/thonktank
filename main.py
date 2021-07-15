@@ -63,8 +63,14 @@ def filter_ideas_table(conn, filter):
     :param conn: the Connection object
     :return:
     """
+    # Probably very insecure
+    tags = filter.split(" ")
+    sql = f"SELECT * FROM ideas WHERE tags LIKE '%{tags[0]}%'"
+    for tag in tags[1:]:
+        sql += f"AND tags LIKE '%{tag}%'"
+
     cur = conn.cursor()
-    cur.execute("SELECT * FROM ideas WHERE tags LIKE '%' || ? || '%'", filter)
+    cur.execute(sql)
 
     rows = cur.fetchall()
 
@@ -145,7 +151,7 @@ def main():
                 filter = input("Select tags to filter: ")
                 os.system("clear")
                 print("Thonktank")
-                filter_ideas_table(conn, (filter,))
+                filter_ideas_table(conn, filter)
                 input("(enter to continue)")
             elif(option == "5"):
                 sys.exit(0)
