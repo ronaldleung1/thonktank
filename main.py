@@ -57,6 +57,19 @@ def select_ideas_table(conn):
 
     print(tabulate(rows, headers=["#", "Name", "Description", "Tags"], tablefmt="fancy_grid"))
 
+def filter_ideas_table(conn, filter):
+    """
+    Query all rows in the ideas table
+    :param conn: the Connection object
+    :return:
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM ideas WHERE tags LIKE '%' || ? || '%'", filter)
+
+    rows = cur.fetchall()
+
+    print(tabulate(rows, headers=["#", "Name", "Description", "Tags"], tablefmt="fancy_grid"))
+
 def update_idea(conn, idea):
     """
     Update idea with matching id in table
@@ -110,7 +123,7 @@ def main():
         while(True):
             print("Thonktank")
             select_ideas_table(conn)
-            option = input("\n(1) Create new idea (2) Edit idea (3) Delete idea (4) Exit\n")
+            option = input("\n(1) Create new idea (2) Edit idea (3) Delete idea (4) Filter ideas (5) Exit\n")
             if(option == "1"):
                 # Create new idea
                 name = str(input("Name: "))
@@ -129,6 +142,12 @@ def main():
                 id = int(input("Select ID of idea to be deleted: "))
                 delete_idea(conn, id)
             elif(option == "4"):
+                filter = input("Select tags to filter: ")
+                os.system("clear")
+                print("Thonktank")
+                filter_ideas_table(conn, (filter,))
+                input("(enter to continue)")
+            elif(option == "5"):
                 sys.exit(0)
             else:
                 input("Not a valid command (enter to continue)")
