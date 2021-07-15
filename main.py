@@ -119,7 +119,10 @@ def main():
      
     # create a database connection
     global conn
-    conn = create_connection(database) # if os.path.exists(database) else create_connection(r"C:\sqlite\db\pythonsqlite.db")
+    try:
+        conn = create_connection(database)
+    except:
+        conn = create_connection(os.getcwd()+"/thonktank.db")
 
     if conn is not None:
 
